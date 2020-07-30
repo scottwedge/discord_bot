@@ -355,8 +355,11 @@ class MyClient(discord.Client):
         user = self.get_guild(539219885922713620).get_member(payload.user_id)
         if user == None:
             print("User not found in Cache")
-            return
-
+            user = await self.fetch_user(payload.user_id)
+            if user == None:
+                print("User does not exist")
+                return
+            print(f"{user.display_name} wasnt found in cache")
         if user.id == self.user.id:
             return
 
