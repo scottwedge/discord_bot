@@ -39,7 +39,7 @@ class MyClient(discord.Client):
         self.carry_list = []
         self.playing = False
         self.isUrsusTimeTurnOn = False
-        self.carry_channel = [547026678438690836, 539516076988301312, 539516154625130496, 539515995539111936, 736392255421546517]
+        self.carry_channel = [547026678438690836,737089087508447362,539516154625130496,736911310423326751,736392255421546517]
         self.carry_list = []
         try:
             self.carry_list = pickle.load(open("carries.pickle","rb"))
