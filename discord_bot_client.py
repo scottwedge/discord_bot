@@ -74,13 +74,13 @@ class MyClient(discord.Client):
                                     "Dont forget to participate! <:sealwave:695186898230181949>"
                     await self.get_channel(539219885922713623).send(flag_race_str, file=discord.File(f"gifs/{random.choice(os.listdir('gifs'))}"),delete_after = 360)
                 if self.isUrsusTime() and self.isUrsusTimeTurnOn == False:
-                    await self.get_channel(698056461002997760).edit(name=f"👉It's Ursus Time!👈")
+                    await self.get_channel(698056461002997760).edit(name="👉It's Ursus Time!👈")
                     self.isUrsusTimeTurnOn = True
                     print(f'Turning on UrsusTime. Currently {datetime.utcnow()}')
                 elif self.isUrsusTime() == False and self.isUrsusTimeTurnOn == True:
                     self.isUrsusTimeTurnOn = False
                     print(f'Turning off UrsusTime. Currently {datetime.utcnow()}')
-                    await self.get_channel(698056461002997760).edit(name=f"😔It's not Ursus Time")
+                    await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
             except Exception as e:
                 print(e)
                 print("Change_channel errored")
@@ -119,7 +119,7 @@ class MyClient(discord.Client):
                 results = json.loads(YoutubeSearch(message.content[6:], max_results=10).to_json())
                 embed = discord.Embed(title="Search Results", description="Please Select A Number", color=0x00ff00)
                 for i, r in enumerate(results['videos']):
-                    embed.add_field(name=f"{i+1}", value =f"{r['title']}", inline=False)
+                    embed.add_field(name=i+1, value =r['title'], inline=False)
 
                 await message.channel.send(embed=embed)
                 channel = message.channel
