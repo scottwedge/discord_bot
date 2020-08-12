@@ -25,8 +25,8 @@ class Carry():
             self.max = 5
         elif self.carry_id == 539516154625130496:
             self.carry_name = "Chaos Root Abyss Carry"
-            self.channel_role_ping_id = [736928629015183411] # Only have hmag role id
-            self.image = ['https://cdn.wikimg.net/en/strategywiki/images/thumb/a/a4/MS_Monster_Vellum.png/300px-MS_Monster_Vellum.png'],
+            self.channel_role_ping_id = [736928629015183411]
+            self.image = ['https://i.imgur.com/dF6YpA8.png', 'https://vignette.wikia.nocookie.net/maplestory/images/d/da/Mob_Vellum.png', 'https://66.media.tumblr.com/a55b4fc198d14f378ccd5a490b437e20/tumblr_pay2gaWovN1sagj7io2_250.png', 'https://vignette.wikia.nocookie.net/maplestory/images/5/50/Pet_Von_Bon_%28stand%29.png']
             self.max = 5
         elif self.carry_id == 737089087508447362:
             self.carry_name = "Hard Magnus Carry"
@@ -41,7 +41,7 @@ class Carry():
         elif self.carry_id == 736392255421546517:
             self.carry_name = "Testing Carry"
             self.channel_role_ping_id = [687416417368145930]
-            self.image = ['https://cdn.discordapp.com/emojis/609639640089100291.png?v=1', 'https://www.pngjoy.com/pngm/342/6391790_maplestory-maplestory-damien-transparent-png.png', 'https://www.uokpl.rs/fpng/f/576-5764999_black-heaven-suu.png']
+            self.image = ['https://vignette.wikia.nocookie.net/maplestory/images/5/50/Pet_Von_Bon_%28stand%29.png']
             self.max = 5
         else:
             print("Create Message Embed Happened to a non-bossing channel")
