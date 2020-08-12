@@ -83,7 +83,9 @@ class Carry():
         embed.add_field(name="How to Remove", value = "Remove the React :D", inline=False)
         embed.add_field(name="How to Cancel (For Carrier)", value = "type >cancel_carry", inline=False)
         embed.set_footer(text="For any bugs, please report to Snooted. Happy Bossing!")
-        embed.set_thumbnail(url = f"{random.choice(self.image)}")
+        random.seed(datetime.now())
+        image_url = random.choice(self.image)
+        embed.set_thumbnail(url = image_url)
         return embed
 
     def format_time(self, time):
