@@ -17,6 +17,8 @@ import random
 import validators
 from youtube_search import YoutubeSearch
 from carry_class import Carry
+import dateparser 
+from birthday import Birthdays
 
 class MyClient(discord.Client):
     authorizedUsers = [132996207831285760]  # My ID
@@ -37,6 +39,8 @@ class MyClient(discord.Client):
         print(self.user.name)
         print(self.user.id)
         self.carry_list = []
+        #await self.scrap()
+        self.birthdays = Birthdays()
         self.playing = False
         self.isUrsusTimeTurnOn = False
         self.carry_channel = [547026678438690836,737089087508447362,539516154625130496,736911310423326751,736392255421546517]
@@ -81,8 +85,13 @@ class MyClient(discord.Client):
                     self.isUrsusTimeTurnOn = False
                     print(f'Turning off UrsusTime. Currently {datetime.utcnow()}')
                     await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
+                
+                # Change_channel_name function now isnt truly a change_channel... this is now just a time check function.............. :(
+                if datetime.utcnow().minute == 0 and datetime.utcnow().hour == 0:
+                    self.birthdays = Birthdays()
             except Exception as e:
                 print(e)
+
                 print("Change_channel errored")
 
             sleep_for = 60 - datetime.utcnow().second
@@ -183,6 +192,17 @@ class MyClient(discord.Client):
                 for vc in self.voice_clients:
                     if vc and vc.is_connected():
                         await vc.disconnect()
+        if message.channel.id == 738886647059316838:
+            await self.add_birthday(message)
+
+        if message.content.lower() == ".birthdays":
+            birthday_embed = discord.Embed(title="10 Upcoming Birthdays!", description="Watch out for these fellows with their birthdays nearing! Remember to wish em a happy early birthday!", color=0x42b9f5)
+            for i in range(0, 10):
+                b = self.birthdays.all_birthdays[i]
+                member = client.get_guild(539219885922713620).get_member(b.user_id).display_name
+                birthday_embed.add_field(name=member, value=f"in {b.time_till} days ({b.birthday_string})", inline=False)
+            birthday_embed.set_footer(text="Happy Early Birthdays to these fellas!")
+            await message.channel.send(embed=birthday_embed)
 
         if message.content.lower() == ".quit" and message.author.id in self.authorizedUsers:
             exit()
@@ -414,7 +434,29 @@ class MyClient(discord.Client):
                         pickle.dump(self.carry_list, pickle_out)
                     elif status_code == 1 or status_code == 2: # Should never really happen... unless I misthought something
                         print("Something went terriby wrong o.o")
-    
+
+    async def scrap(self):
+        channel = self.get_channel(738886647059316838)
+        with open("birthdays.txt", "a+") as fp:
+            async for message in channel.history(limit = None):
+                parsed = dateparser.parse(message.content)
+                if parsed == None:
+                    print(f"cannot parse message {message.content} from {message.author.id}-{message.author.display_name}")
+                    fp.write(f"error -- {message.author.id}-{message.author.display_name}-{message.content}\n")
+                else:
+                    fp.write(f"{message.author.id}-{message.author.display_name}-{message.content}\n")
+                    
+    async def add_birthday(self, message):
+        channel = self.get_channel(738886647059316838)
+        parsed = dateparser.parse(message.content)
+        if parsed == None:
+            print(f"cannot parse message {message.content} from {message.author.id}-{message.author.display_name}")
+            await self.get_user(132996207831285760).send(f"cannot parse message {message.content} from {message.author.id}-{message.author.display_name}")
+        else:
+            with open("birthdays.txt", "a+") as fp:
+                fp.write(f"{message.author.id}:-:{message.author.display_name}:-:{message.content}\n")
+            self.birthdays = Birthdays()
+
 client=MyClient()
 client.loop.create_task(client.change_channel_name())
 client.run(os.getenv('DISCORD_KEY'))
