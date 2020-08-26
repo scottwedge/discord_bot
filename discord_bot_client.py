@@ -25,6 +25,18 @@ class MyClient(discord.Client):
     quotes = []
     isUrsusTimeTurnOn = False
 
+    async def send_birthday_notice(self):
+        general_channel = self.guild.get_channel(539219885922713623)
+
+        for birthday in self.birthdays.all_birthdays:
+            if birthday.time_till == 0:
+                try:
+                    await general_channel.send(f'<@{birthday.user_id}> Happy Birthday!! <:UmbreonHappy:630381177076711425><:EspeonParty:630381017353682974><:UmbreonHYPE:630381573534908416>') 
+                except Exception as e:
+                    print(e)
+            else:
+                break
+
     def isUrsusTime(self):
         start_time = datetime.strptime('10:00 AM', '%I:%M %p').time()
         end_time = datetime.strptime('10:00 PM', '%I:%M %p').time()
@@ -38,6 +50,13 @@ class MyClient(discord.Client):
         print('Logged in as')
         print(self.user.name)
         print(self.user.id)
+        self.image_commands = {}
+        for root, dirs, files in os.walk("commands"):
+            for d in dirs:
+                for sub_root, sub_dirs, sub_files in os.walk(f"commands/{d}"):
+                    for name in sub_dirs:
+                        self.image_commands[f">{name}"] = os.path.join(f"{root}/{d}", name)
+        print(self.image_commands)
         self.carry_list = []
         #await self.scrap()
         self.birthdays = Birthdays()
@@ -45,6 +64,7 @@ class MyClient(discord.Client):
         self.isUrsusTimeTurnOn = False
         self.carry_channel = [547026678438690836,737089087508447362,539516154625130496,736911310423326751,736392255421546517]
         self.carry_list = []
+        self.guild = client.get_guild(539219885922713620)
         try:
             self.carry_list = pickle.load(open("carries.pickle","rb"))
             for carry in self.carry_list:
@@ -89,15 +109,14 @@ class MyClient(discord.Client):
                 # Change_channel_name function now isnt truly a change_channel... this is now just a time check function.............. :(
                 if datetime.utcnow().minute == 0 and datetime.utcnow().hour == 0:
                     self.birthdays = Birthdays()
+                    await self.send_birthday_notice()
             except Exception as e:
                 print(e)
-
                 print("Change_channel errored")
 
             sleep_for = 60 - datetime.utcnow().second
             if sleep_for < 10:
                 sleep_for = 60
-
             await asyncio.sleep(sleep_for)
 
     async def music_command(self, message):
@@ -168,6 +187,13 @@ class MyClient(discord.Client):
         # we do not want the bot to reply to itself
         if message.author.id == self.user.id:
             return
+        if message.content.lower() in self.image_commands:
+            if "restricted" in self.image_commands[message.content.lower()] and message.channel.id != 544213210476314631:
+                await message.channel.send("Hey! This image content cannot be shown in this channel!")
+                return
+            image_selected = random.choice(os.listdir(self.image_commands[message.content.lower()]))
+            path = f"{self.image_commands[message.content.lower()]}/{image_selected}"
+            await message.channel.send(file=discord.File(path))
 
         if message.author.id == 132996207831285760: #Me:
             if message.content.lower().startswith(">play"):
@@ -196,11 +222,14 @@ class MyClient(discord.Client):
             await self.add_birthday(message)
 
         if message.content.lower() == ".birthdays":
-            birthday_embed = discord.Embed(title="10 Upcoming Birthdays!", description="Watch out for these fellows with their birthdays nearing! Remember to wish em a happy early birthday!", color=0x42b9f5)
+            birthday_embed = discord.Embed(title="10 Upcoming Birthdays! (in UTC Timezone)", description="Watch out for these fellows with their birthdays nearing! Remember to wish em a happy early birthday!", color=0x42b9f5)
             for i in range(0, 10):
                 b = self.birthdays.all_birthdays[i]
                 member = client.get_guild(539219885922713620).get_member(b.user_id).display_name
-                birthday_embed.add_field(name=member, value=f"in {b.time_till} days ({b.birthday_string})", inline=False)
+                if b.time_till == 0:
+                    birthday_embed.add_field(name=member, value=f"<:EspeonParty:630381017353682974> Today is his/her birthday! <:EspeonParty:630381017353682974>)", inline=False)
+                else:
+                    birthday_embed.add_field(name=member, value=f"in {b.time_till} days ({b.birthday_string})", inline=False)
             birthday_embed.set_footer(text="Happy Early Birthdays to these fellas!")
             await message.channel.send(embed=birthday_embed)
 

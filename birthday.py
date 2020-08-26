@@ -26,6 +26,7 @@ class Birthdays():
 
         def days_till_birthday(self):
             now = datetime.now()
-            if self.user_birthday < now:
+            now = datetime(now.year, now.month, now.day-1)
+            if self.user_birthday <= now:
                 self.user_birthday = datetime(self.user_birthday.year + 1, self.user_birthday.month, self.user_birthday.day)
-            return (self.user_birthday - now).days
+            return (self.user_birthday - now).days - 1
