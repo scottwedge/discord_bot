@@ -79,6 +79,18 @@ class MyClient(discord.Client):
                     pickle.dump(self.carry_list, pickle_out)
         except:
             print("No pickle has been found")
+        
+        self.name_mapping = {}
+       # print(self.guild.me.guild_permissions.manage_nicknames)
+       # with open("name_mapping.txt", "r+") as fp:
+       #     for member in self.guild.members:
+       #         try:
+       #             if member.nick == "HAPPY BIRTHDAY":
+       #                 await member.edit(nick=None)
+       #         except Exception as e:
+       #             print(f"cannot change user {member.nick}")#
+       #             print(e)
+
             
         with open("insults.txt", "r") as insults:
             self.insult_list = [insult.strip("\n") for insult in insults.readlines()]
@@ -98,14 +110,15 @@ class MyClient(discord.Client):
                                     "Dont forget to participate! <:sealwave:695186898230181949>"
                     await self.get_channel(539219885922713623).send(flag_race_str, file=discord.File(f"gifs/{random.choice(os.listdir('gifs'))}"),delete_after = 360)
                 if self.isUrsusTime() and self.isUrsusTimeTurnOn == False:
-                    await self.get_channel(698056461002997760).edit(name="👉It's Ursus Time!👈")
+                    #await self.get_channel(698056461002997760).edit(name="👉It's Ursus Time!👈")
+                    await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
                     self.isUrsusTimeTurnOn = True
                     print(f'Turning on UrsusTime. Currently {datetime.utcnow()}')
                 elif self.isUrsusTime() == False and self.isUrsusTimeTurnOn == True:
                     self.isUrsusTimeTurnOn = False
                     print(f'Turning off UrsusTime. Currently {datetime.utcnow()}')
-                    await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
-                
+                    #await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
+                    await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
                 # Change_channel_name function now isnt truly a change_channel... this is now just a time check function.............. :(
                 if datetime.utcnow().minute == 0 and datetime.utcnow().hour == 0:
                     self.birthdays = Birthdays()
