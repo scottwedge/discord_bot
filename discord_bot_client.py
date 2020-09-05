@@ -19,6 +19,10 @@ from youtube_search import YoutubeSearch
 from carry_class import Carry
 import dateparser 
 from birthday import Birthdays
+from nsfw_model.nsfw_detector import predict
+import tensorflow as tf
+from tensorflow import keras
+import tensorflow_hub as hub
 
 class MyClient(discord.Client):
     authorizedUsers = [132996207831285760]  # My ID
@@ -91,13 +95,14 @@ class MyClient(discord.Client):
        #             print(f"cannot change user {member.nick}")#
        #             print(e)
 
-            
-        with open("insults.txt", "r") as insults:
-            self.insult_list = [insult.strip("\n") for insult in insults.readlines()]
         with open("beautiful.txt", "r") as beautifuls:
             self.beautiful_list = [beautiful.strip("\n") for beautiful in beautifuls.readlines()]
         print('-----')
         await self.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="You Sleep..."))
+
+        #model = predict.load_model("./nsfw_model/mobilenet_v2_140_224/saved_model_old.h5")
+        self.model = tf.keras.models.load_model('./nsfw_model/mobilenet_v2_140_224/saved_model.h5',custom_objects={'KerasLayer':hub.KerasLayer})
+        print("done loading!")
         
     async def change_channel_name(self):
         await self.wait_until_ready()
@@ -289,6 +294,19 @@ class MyClient(discord.Client):
         
         if message.content.lower().startswith(">cancel_carry"):
             await self.cancel_carry_command(message)
+
+        if message.channel.id == 539219885922713623 and len(message.attachments) > 0:
+            for attachment in message.attachments:
+                await attachment.save("image_to_classify_if_nsfw.jpg")
+                predicted_result = predict.classify(self.model, "image_to_classify_if_nsfw.jpg")
+                res = predicted_result['image_to_classify_if_nsfw.jpg']
+                print(res)
+                if res["hentai"] >= 0.7 or res["porn"] >= 0.7:
+                    await message.channel.send(f"<@{message.author.id}> The image you uploaded has been flagged as NSFW\n" +
+                            f"Likelihood of Hentai: {res['hentai']}\n"+
+                            f"Likelihood of Porn: {res['porn']}\n"
+                            "Please keep this channel clean. If you think this is a inaccurate flag, please report to Snooted (Bin)")
+                    await message.delete()
 
     async def cancel_carry_command(self, message):
         found_carry = None
