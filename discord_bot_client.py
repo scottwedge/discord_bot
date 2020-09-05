@@ -42,13 +42,28 @@ class MyClient(discord.Client):
                 break
 
     def isUrsusTime(self):
-        start_time = datetime.strptime('10:00 AM', '%I:%M %p').time()
-        end_time = datetime.strptime('10:00 PM', '%I:%M %p').time()
+        start_time1 = datetime.strptime('6:00 PM', '%I:%M %p').time()
+        end_time1 = datetime.strptime('8:00 PM', '%I:%M %p').time()
+        
+        start_time2 = datetime.strptime('1:00 AM', '%I:%M %p').time()
+        end_time2 = datetime.strptime('3:00 AM', '%I:%M %p').time()
+
         current_time = datetime.utcnow().time()
-        if start_time < end_time:
-            return current_time >= start_time and current_time <= end_time
+
+        between_first_interval = False
+        between_second_interval = False
+        if start_time1 < end_time1:
+            between_first_interval = (current_time >= start_time1 and current_time <= end_time1)
         else: # Corsses midnight
-            return current_time >= start_time or current_time <= end_time
+            between_first_interval = (current_time >= start_time1 or current_time <= end_time1)
+
+
+        if start_time2 < end_time2:
+            between_second_interval = (current_time >= start_time2 and current_time <= end_time2)
+        else: # Corsses midnight
+            between_second_interval = (current_time >= start_time2 or current_time <= end_time2)
+        
+        return between_first_interval or between_second_interval
 
     async def on_ready(self):
         print('Logged in as')
@@ -115,15 +130,15 @@ class MyClient(discord.Client):
                                     "Dont forget to participate! <:sealwave:695186898230181949>"
                     await self.get_channel(539219885922713623).send(flag_race_str, file=discord.File(f"gifs/{random.choice(os.listdir('gifs'))}"),delete_after = 360)
                 if self.isUrsusTime() and self.isUrsusTimeTurnOn == False:
-                    #await self.get_channel(698056461002997760).edit(name="👉It's Ursus Time!👈")
-                    await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
+                    await self.get_channel(698056461002997760).edit(name="👉It's Ursus Time!👈")
+                    #await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
                     self.isUrsusTimeTurnOn = True
                     print(f'Turning on UrsusTime. Currently {datetime.utcnow()}')
                 elif self.isUrsusTime() == False and self.isUrsusTimeTurnOn == True:
                     self.isUrsusTimeTurnOn = False
                     print(f'Turning off UrsusTime. Currently {datetime.utcnow()}')
-                    #await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
-                    await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
+                    await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
+                    #await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
                 # Change_channel_name function now isnt truly a change_channel... this is now just a time check function.............. :(
                 if datetime.utcnow().minute == 0 and datetime.utcnow().hour == 0:
                     self.birthdays = Birthdays()
