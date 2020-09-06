@@ -272,12 +272,6 @@ class MyClient(discord.Client):
         if message.content.lower() == "still alive?" and message.author.id == 132996207831285760:
             await message.channel.send("Yes! Alive and well!")
 
-        if message.author.id == 405196729751699457:
-            await message.add_reaction('\U0001f335')
-
-        if message.author.id == 463496310691987476 or message.author.id == 123172391466565632:
-            await message.add_reaction('<a:uwupls:609932232248918026>')
-
         if (message.content.lower() == "no u" or message.content.lower() == "no you") and message.author.id != 132996207831285760:
             await message.channel.send("no u")
 
