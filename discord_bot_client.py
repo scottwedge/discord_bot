@@ -127,7 +127,7 @@ class MyClient(discord.Client):
                 if datetime.utcnow().minute == 55 and datetime.utcnow().hour in [11, 18, 20, 21, 22]:
                     flag_race_str = "<:YayRoo:609639493288591371><:YayRoo:609639493288591371> Hey <@&698067878133628958>! Its going to be 5 minutes until " \
                                     "<:UmbreonHYPE:630381573534908416>**Flag Race**!!<:UmbreonHYPE:630381573534908416> " \
-                                    "Dont forget to participate! <:sealwave:695186898230181949>"
+                                    "Don't forget to participate! <:sealwave:695186898230181949>"
                     #await self.get_channel(539219885922713623).send(flag_race_str, file=discord.File(f"gifs/{random.choice(os.listdir('gifs'))}"),delete_after = 360)
                 if self.isUrsusTime() and self.isUrsusTimeTurnOn == False:
                     await self.get_channel(752691454467375104).edit(name="👉It's Ursus Time!👈")
@@ -139,7 +139,7 @@ class MyClient(discord.Client):
                     print(f'Turning off UrsusTime. Currently {datetime.utcnow()}')
                     await self.get_channel(752691454467375104).edit(name="😔It's not Ursus Time")
                     #await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
-                # Change_channel_name function now isnt truly a change_channel... this is now just a time check function.............. :(
+                # Change_channel_name function now isn't truly a change_channel... this is now just a time check function.............. :(
                 if datetime.utcnow().minute == 0 and datetime.utcnow().hour == 0:
                     self.birthdays = Birthdays()
                     await self.send_birthday_notice()
@@ -210,7 +210,7 @@ class MyClient(discord.Client):
                 except FileNotFoundError:
                     pass
                 except Exception as e:
-                    print(f'Error occured in music... {e}')
+                    print(f'Error occurred in music... {e}')
                     await message.channel.send("Bad stuff happened :(")
             await message.channel.send("Playing...")
             vc.play(discord.FFmpegPCMAudio("song.mp3"))
@@ -448,7 +448,7 @@ class MyClient(discord.Client):
             if user == None:
                 print("User does not exist")
                 return
-            print(f"{user.display_name} wasnt found in cache")
+            print(f"{user.display_name} wasn't found in cache")
         if user.id == self.user.id:
             return
 
@@ -502,7 +502,7 @@ class MyClient(discord.Client):
                         pickle_out = open("carries.pickle", "wb")
                         pickle.dump(self.carry_list, pickle_out)
                     elif status_code == 1 or status_code == 2: # Should never really happen... unless I misthought something
-                        print("Something went terriby wrong o.o")
+                        print("Something went terribly wrong o.o")
 
     async def scrap(self):
         channel = self.get_channel(738886647059316838)
