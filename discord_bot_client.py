@@ -30,7 +30,7 @@ class MyClient(discord.Client):
     isUrsusTimeTurnOn = False
 
     async def send_birthday_notice(self):
-        general_channel = self.guild.get_channel(539219885922713623)
+        general_channel = self.guild.get_channel(751995980395839499)
 
         for birthday in self.birthdays.all_birthdays:
             if birthday.time_till == 0:
@@ -83,7 +83,7 @@ class MyClient(discord.Client):
         self.isUrsusTimeTurnOn = False
         self.carry_channel = [547026678438690836,737089087508447362,539516154625130496,736911310423326751,736392255421546517]
         self.carry_list = []
-        self.guild = client.get_guild(539219885922713620)
+        self.guild = client.get_guild(671132975659745310)
         try:
             self.carry_list = pickle.load(open("carries.pickle","rb"))
             for carry in self.carry_list:
@@ -128,16 +128,16 @@ class MyClient(discord.Client):
                     flag_race_str = "<:YayRoo:609639493288591371><:YayRoo:609639493288591371> Hey <@&698067878133628958>! Its going to be 5 minutes until " \
                                     "<:UmbreonHYPE:630381573534908416>**Flag Race**!!<:UmbreonHYPE:630381573534908416> " \
                                     "Dont forget to participate! <:sealwave:695186898230181949>"
-                    await self.get_channel(539219885922713623).send(flag_race_str, file=discord.File(f"gifs/{random.choice(os.listdir('gifs'))}"),delete_after = 360)
+                    #await self.get_channel(539219885922713623).send(flag_race_str, file=discord.File(f"gifs/{random.choice(os.listdir('gifs'))}"),delete_after = 360)
                 if self.isUrsusTime() and self.isUrsusTimeTurnOn == False:
-                    await self.get_channel(698056461002997760).edit(name="👉It's Ursus Time!👈")
+                    await self.get_channel(752691454467375104).edit(name="👉It's Ursus Time!👈")
                     #await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
                     self.isUrsusTimeTurnOn = True
                     print(f'Turning on UrsusTime. Currently {datetime.utcnow()}')
                 elif self.isUrsusTime() == False and self.isUrsusTimeTurnOn == True:
                     self.isUrsusTimeTurnOn = False
                     print(f'Turning off UrsusTime. Currently {datetime.utcnow()}')
-                    await self.get_channel(698056461002997760).edit(name="😔It's not Ursus Time")
+                    await self.get_channel(752691454467375104).edit(name="😔It's not Ursus Time")
                     #await self.get_channel(698056461002997760).edit(name="Ursus Time Under Maintenance")
                 # Change_channel_name function now isnt truly a change_channel... this is now just a time check function.............. :(
                 if datetime.utcnow().minute == 0 and datetime.utcnow().hour == 0:
@@ -221,7 +221,7 @@ class MyClient(discord.Client):
         if message.author.id == self.user.id:
             return
         if message.content.lower() in self.image_commands:
-            if "restricted" in self.image_commands[message.content.lower()] and message.channel.id != 544213210476314631:
+            if "restricted" in self.image_commands[message.content.lower()] and message.channel.id != 751995980395839499:
                 await message.channel.send("Hey! This image content cannot be shown in this channel!")
                 return
             image_selected = random.choice(os.listdir(self.image_commands[message.content.lower()]))
@@ -251,14 +251,14 @@ class MyClient(discord.Client):
                 for vc in self.voice_clients:
                     if vc and vc.is_connected():
                         await vc.disconnect()
-        if message.channel.id == 738886647059316838:
-            await self.add_birthday(message)
+        #if message.channel.id == 738886647059316838:
+        #    await self.add_birthday(message)
 
         if message.content.lower() == ".birthdays":
             birthday_embed = discord.Embed(title="10 Upcoming Birthdays! (in UTC Timezone)", description="Watch out for these fellows with their birthdays nearing! Remember to wish em a happy early birthday!", color=0x42b9f5)
             for i in range(0, 10):
                 b = self.birthdays.all_birthdays[i]
-                member = client.get_guild(539219885922713620).get_member(b.user_id).display_name
+                member = client.get_guild(671132975659745310).get_member(b.user_id).display_name
                 if b.time_till == 0:
                     birthday_embed.add_field(name=member, value=f"<:EspeonParty:630381017353682974> Today is his/her birthday! <:EspeonParty:630381017353682974>)", inline=False)
                 else:
@@ -293,18 +293,18 @@ class MyClient(discord.Client):
             await message.channel.send(f"{message.guild.get_member(int(message.content.split()[1])).display_name} account was created at {created_date} UTC") 
         
         if message.channel.type == discord.ChannelType.private:
-            await self.get_guild(539219885922713620).get_member(132996207831285760).send(f"Msg Received From {message.author.name}: {message.content}")
+            await self.get_guild(671132975659745310).get_member(132996207831285760).send(f"Msg Received From {message.author.name}: {message.content}")
 
         if message.content.startswith(">send") and message.author.id == 132996207831285760:
-            await self.get_guild(539219885922713620).get_member(int(message.content.split(" ")[1])).send(" ".join(message.content.split(" ")[2:]))
+            await self.get_guild(671132975659745310).get_member(int(message.content.split(" ")[1])).send(" ".join(message.content.split(" ")[2:]))
         
-        if message.content.lower().startswith(">carry"):
-            await self.carry_command(message)
+        #if message.content.lower().startswith(">carry"):
+        #    await self.carry_command(message)
         
-        if message.content.lower().startswith(">cancel_carry"):
-            await self.cancel_carry_command(message)
+        #if message.content.lower().startswith(">cancel_carry"):
+        #    await self.cancel_carry_command(message)
 
-        if message.channel.id == 539219885922713623 and len(message.attachments) > 0:
+        if message.channel.id == 751995980395839499 and len(message.attachments) > 0:
             for attachment in message.attachments:
                 await attachment.save("image_to_classify_if_nsfw.jpg")
                 predicted_result = predict.classify(self.model, "image_to_classify_if_nsfw.jpg")
